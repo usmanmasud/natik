@@ -1,7 +1,8 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { Zap, Send, ArrowLeft, Loader2, Bot, User } from "lucide-react";
+import { useSession, signOut } from "next-auth/react";
+import { Zap, Send, ArrowLeft, Loader2, Bot, User, LogOut } from "lucide-react";
 
 interface Message {
   role: "user" | "ai";
@@ -19,6 +20,7 @@ const suggestions = [
 ];
 
 export default function Copilot() {
+  const { data: session } = useSession();
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "ai",
@@ -78,9 +80,18 @@ export default function Copilot() {
             </div>
           </div>
         </div>
-        <Link href="/" className="flex items-center gap-2">
-          <span className="font-bold text-lg">NATIK</span>
-        </Link>
+        <div className="flex items-center gap-3">
+            <div className="hidden sm:flex items-center gap-2 text-sm text-white/40">
+              <span>{session?.user?.name}</span>
+            </div>
+            <button
+              onClick={() => signOut({ callbackUrl: "/login" })}
+              className="glass p-2 rounded-lg text-white/30 hover:text-red-400 transition-colors"
+              title="Sign out"
+            >
+              <LogOut size={16} />
+            </button>
+          </div>
       </header>
 
       {/* Messages */}
