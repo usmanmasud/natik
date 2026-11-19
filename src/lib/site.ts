@@ -4,7 +4,7 @@ export const site = {
   name: "NATIK",
   tagline: "AI Operations Intelligence for African Businesses",
   url: "https://natik2.natik.com.ng",
-  contactEmail: "hello@natik.com.ng",
-  supportEmail: "support@natik.com.ng",
+  contactEmail: "contact@natik.com.ng",
+  supportEmail: "contact@natik.com.ng",
   location: "Nigeria",
 };
