@@ -17,19 +17,23 @@ export default function LoginPage() {
     setError("");
     setLoading(true);
 
-    const res = await signIn("credentials", {
-      email: form.email,
-      password: form.password,
-      redirect: false,
-    });
+    try {
+      const res = await signIn("credentials", {
+        email: form.email.trim().toLowerCase(),
+        password: form.password,
+        redirect: false,
+      });
 
-    setLoading(false);
-
-    if (res?.error) {
-      setError("Invalid email or password.");
-    } else {
+      if (!res || res.error) {
+        setError("Invalid email or password.");
+        return;
+      }
       router.push("/dashboard");
       router.refresh();
+    } catch {
+      setError("We couldn't reach the server. Check your connection and try again.");
+    } finally {
+      setLoading(false);
     }
   }
 

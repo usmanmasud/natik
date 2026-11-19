@@ -28,33 +28,39 @@ export interface Order {
   type: string;
 }
 
+// Sample data dates are relative to today so the demo workspace always looks current.
+function d(offsetDays: number): string {
+  const date = new Date(Date.now() + offsetDays * 86400000);
+  return date.toISOString().slice(0, 10);
+}
+
 export const mockCustomers: Customer[] = [
-  { id: "1", name: "Adaeze Okonkwo", email: "adaeze@gmail.com", phone: "+234 801 234 5678", balance: 850000, lastContact: "2025-06-01", status: "overdue", totalSpent: 3200000 },
-  { id: "2", name: "Emeka Nwosu", email: "emeka@nwosu.com", phone: "+234 802 345 6789", balance: 1200000, lastContact: "2025-06-10", status: "overdue", totalSpent: 5800000 },
-  { id: "3", name: "Fatima Al-Hassan", email: "fatima@alhassan.ng", phone: "+234 803 456 7890", balance: 0, lastContact: "2025-07-01", status: "active", totalSpent: 2100000 },
-  { id: "4", name: "Chukwudi Eze", email: "chukwudi@eze.com", phone: "+234 804 567 8901", balance: 450000, lastContact: "2025-05-20", status: "at-risk", totalSpent: 1500000 },
-  { id: "5", name: "Ngozi Adeyemi", email: "ngozi@adeyemi.ng", phone: "+234 805 678 9012", balance: 2100000, lastContact: "2025-05-15", status: "overdue", totalSpent: 7200000 },
-  { id: "6", name: "Tunde Bakare", email: "tunde@bakare.com", phone: "+234 806 789 0123", balance: 0, lastContact: "2025-07-02", status: "active", totalSpent: 980000 },
-  { id: "7", name: "Amina Yusuf", email: "amina@yusuf.ng", phone: "+234 807 890 1234", balance: 320000, lastContact: "2025-06-05", status: "at-risk", totalSpent: 1800000 },
-  { id: "8", name: "Biodun Olatunji", email: "biodun@olatunji.com", phone: "+234 808 901 2345", balance: 1800000, lastContact: "2025-05-28", status: "overdue", totalSpent: 4300000 },
+  { id: "1", name: "Adaeze Okonkwo", email: "adaeze@gmail.com", phone: "+234 801 234 5678", balance: 850000, lastContact: d(-24), status: "overdue", totalSpent: 3200000 },
+  { id: "2", name: "Emeka Nwosu", email: "emeka@nwosu.com", phone: "+234 802 345 6789", balance: 1200000, lastContact: d(-18), status: "overdue", totalSpent: 5800000 },
+  { id: "3", name: "Fatima Al-Hassan", email: "fatima@alhassan.ng", phone: "+234 803 456 7890", balance: 0, lastContact: d(-2), status: "active", totalSpent: 2100000 },
+  { id: "4", name: "Chukwudi Eze", email: "chukwudi@eze.com", phone: "+234 804 567 8901", balance: 450000, lastContact: d(-12), status: "at-risk", totalSpent: 1500000 },
+  { id: "5", name: "Ngozi Adeyemi", email: "ngozi@adeyemi.ng", phone: "+234 805 678 9012", balance: 2100000, lastContact: d(-30), status: "overdue", totalSpent: 7200000 },
+  { id: "6", name: "Tunde Bakare", email: "tunde@bakare.com", phone: "+234 806 789 0123", balance: 0, lastContact: d(-1), status: "active", totalSpent: 980000 },
+  { id: "7", name: "Amina Yusuf", email: "amina@yusuf.ng", phone: "+234 807 890 1234", balance: 320000, lastContact: d(-9), status: "at-risk", totalSpent: 1800000 },
+  { id: "8", name: "Biodun Olatunji", email: "biodun@olatunji.com", phone: "+234 808 901 2345", balance: 1800000, lastContact: d(-21), status: "overdue", totalSpent: 4300000 },
 ];
 
 export const mockTasks: Task[] = [
-  { id: "1", title: "Follow up on payment — Adaeze Okonkwo", assignee: "Kemi", customer: "Adaeze Okonkwo", dueDate: "2025-07-05", status: "overdue", priority: "high" },
-  { id: "2", title: "Send visa documents reminder — Emeka Nwosu", assignee: "Tolu", customer: "Emeka Nwosu", dueDate: "2025-07-06", status: "overdue", priority: "high" },
-  { id: "3", title: "Schedule check-in call — Chukwudi Eze", assignee: "Kemi", customer: "Chukwudi Eze", dueDate: "2025-07-08", status: "pending", priority: "medium" },
-  { id: "4", title: "Process refund request — Ngozi Adeyemi", assignee: "Tolu", customer: "Ngozi Adeyemi", dueDate: "2025-07-04", status: "overdue", priority: "high" },
-  { id: "5", title: "Update customer records — Biodun Olatunji", assignee: "Seun", customer: "Biodun Olatunji", dueDate: "2025-07-10", status: "pending", priority: "low" },
-  { id: "6", title: "Prepare monthly sales report", assignee: "Seun", dueDate: "2025-07-07", status: "pending", priority: "medium" },
+  { id: "1", title: "Follow up on payment — Adaeze Okonkwo", assignee: "Kemi", customer: "Adaeze Okonkwo", dueDate: d(-3), status: "overdue", priority: "high" },
+  { id: "2", title: "Send visa documents reminder — Emeka Nwosu", assignee: "Tolu", customer: "Emeka Nwosu", dueDate: d(-2), status: "overdue", priority: "high" },
+  { id: "3", title: "Schedule check-in call — Chukwudi Eze", assignee: "Kemi", customer: "Chukwudi Eze", dueDate: d(2), status: "pending", priority: "medium" },
+  { id: "4", title: "Process refund request — Ngozi Adeyemi", assignee: "Tolu", customer: "Ngozi Adeyemi", dueDate: d(-4), status: "overdue", priority: "high" },
+  { id: "5", title: "Update customer records — Biodun Olatunji", assignee: "Seun", customer: "Biodun Olatunji", dueDate: d(5), status: "pending", priority: "low" },
+  { id: "6", title: "Prepare monthly sales report", assignee: "Seun", dueDate: d(1), status: "pending", priority: "medium" },
 ];
 
 export const mockOrders: Order[] = [
-  { id: "ORD-001", customer: "Adaeze Okonkwo", amount: 850000, status: "delayed", date: "2025-06-15", type: "Visa Application" },
-  { id: "ORD-002", customer: "Emeka Nwosu", amount: 1200000, status: "pending", date: "2025-06-20", type: "Travel Package" },
-  { id: "ORD-003", customer: "Fatima Al-Hassan", amount: 650000, status: "completed", date: "2025-06-25", type: "Hotel Booking" },
-  { id: "ORD-004", customer: "Ngozi Adeyemi", amount: 2100000, status: "delayed", date: "2025-06-10", type: "Group Tour" },
-  { id: "ORD-005", customer: "Tunde Bakare", amount: 380000, status: "completed", date: "2025-06-28", type: "Flight Booking" },
-  { id: "ORD-006", customer: "Amina Yusuf", amount: 920000, status: "pending", date: "2025-06-22", type: "Visa Application" },
+  { id: "ORD-001", customer: "Adaeze Okonkwo", amount: 850000, status: "delayed", date: d(-27), type: "Visa Application" },
+  { id: "ORD-002", customer: "Emeka Nwosu", amount: 1200000, status: "pending", date: d(-14), type: "Travel Package" },
+  { id: "ORD-003", customer: "Fatima Al-Hassan", amount: 650000, status: "completed", date: d(-6), type: "Hotel Booking" },
+  { id: "ORD-004", customer: "Ngozi Adeyemi", amount: 2100000, status: "delayed", date: d(-18), type: "Group Tour" },
+  { id: "ORD-005", customer: "Tunde Bakare", amount: 380000, status: "completed", date: d(-3), type: "Flight Booking" },
+  { id: "ORD-006", customer: "Amina Yusuf", amount: 920000, status: "pending", date: d(-10), type: "Visa Application" },
 ];
 
 export function getBusinessStats() {
@@ -80,7 +86,7 @@ export function analyzeQuery(query: string): string {
 
   if (q.includes("owe") || q.includes("outstanding") || q.includes("payment") || q.includes("debt")) {
     const names = stats.overdueCustomers.map((c) => `${c.name} (${fmt(c.balance)})`).join(", ");
-    return `You have ${fmt(stats.totalOutstanding)} in outstanding payments across ${stats.overdueCustomers.length} customers.\n\nOverdue customers: ${names}.\n\n→ I recommend prioritizing Ngozi Adeyemi (${fmt(2100000)}) and Emeka Nwosu (${fmt(1200000)}) — both have been overdue for 3+ weeks. I can create follow-up tasks for your team.`;
+    return `You have ${fmt(stats.totalOutstanding)} in outstanding payments across ${stats.overdueCustomers.length} customers.\n\nOverdue customers: ${names}.\n\n→ I recommend prioritizing Ngozi Adeyemi (${fmt(2100000)}) and Emeka Nwosu (${fmt(1200000)}) — both are significantly overdue. I can create follow-up tasks for your team.`;
   }
 
   if (q.includes("sales") || q.includes("revenue") || q.includes("drop") || q.includes("performance")) {

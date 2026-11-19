@@ -1,6 +1,8 @@
-"use client";
 import Link from "next/link";
-import { Brain, TrendingUp, Bell, Users, ArrowRight, CheckCircle, Zap, Globe } from "lucide-react";
+import { Brain, TrendingUp, Bell, Users, ArrowRight, CheckCircle, Globe, Mail, ShieldCheck, Target, MapPin } from "lucide-react";
+import Logo from "@/components/Logo";
+import SiteFooter from "@/components/SiteFooter";
+import { site } from "@/lib/site";
 
 const features = [
   {
@@ -40,23 +42,20 @@ export default function Home() {
       {/* Nav */}
       <nav className="fixed top-0 w-full z-50 glass border-b border-white/5">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center">
-              <Zap size={16} className="text-white" />
-            </div>
-            <span className="font-bold text-lg tracking-tight">NATIK</span>
-          </div>
+          <Logo />
           <div className="hidden md:flex items-center gap-8 text-sm text-white/60">
             <a href="#features" className="hover:text-white transition-colors">Features</a>
             <a href="#how" className="hover:text-white transition-colors">How it works</a>
             <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
+            <a href="#about" className="hover:text-white transition-colors">About</a>
+            <a href="#contact" className="hover:text-white transition-colors">Contact</a>
           </div>
           <div className="flex items-center gap-3">
-            <Link href="/dashboard" className="text-sm text-white/70 hover:text-white transition-colors">
+            <Link href="/login" className="text-sm text-white/70 hover:text-white transition-colors">
               Sign in
             </Link>
             <Link
-              href="/dashboard"
+              href="/register"
               className="text-sm bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-lg transition-colors font-medium"
             >
               Get started
@@ -76,7 +75,7 @@ export default function Home() {
             Built for African businesses
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-bold leading-tight mb-6">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold leading-tight mb-6">
             Your business,{" "}
             <span className="gradient-text">intelligently</span>
             <br />
@@ -90,10 +89,10 @@ export default function Home() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
             <Link
-              href="/dashboard"
+              href="/register"
               className="flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 px-8 py-4 rounded-xl font-semibold text-lg transition-all hover:scale-105 glow"
             >
-              Try the demo <ArrowRight size={20} />
+              Start free <ArrowRight size={20} />
             </Link>
             <a
               href="#how"
@@ -109,7 +108,7 @@ export default function Home() {
               <div className="w-3 h-3 rounded-full bg-red-500/70" />
               <div className="w-3 h-3 rounded-full bg-yellow-500/70" />
               <div className="w-3 h-3 rounded-full bg-green-500/70" />
-              <span className="ml-2 text-xs text-white/30">NATIK AI Copilot</span>
+              <span className="ml-2 text-xs text-white/30">NATIK AI Copilot — example</span>
             </div>
             <div className="space-y-3">
               <div className="chat-bubble-user rounded-2xl rounded-tl-sm px-4 py-3 text-sm inline-block">
@@ -121,7 +120,7 @@ export default function Home() {
                 <br />• <span className="text-red-400">3 high-value customers</span> with no staff follow-up in 7+ days
                 <br />• <span className="text-orange-400">18 visa applications</span> awaiting document completion
                 <br /><br />
-                <span className="text-indigo-300">→ I've created 14 follow-up tasks and assigned them to your team.</span>
+                <span className="text-indigo-300">→ I&apos;ve created 14 follow-up tasks and assigned them to your team.</span>
               </div>
             </div>
           </div>
@@ -174,14 +173,14 @@ export default function Home() {
           <p className="text-white/50 mb-12">Start free. Scale as you grow.</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { name: "Starter", price: "Free", features: ["1 user", "Up to 100 customers", "AI Copilot (10 queries/day)", "Basic alerts"] },
-              { name: "Growth", price: "₦25,000/mo", features: ["5 users", "Unlimited customers", "Unlimited AI queries", "Predictive alerts", "Task automation"], highlight: true },
-              { name: "Enterprise", price: "Custom", features: ["Unlimited users", "Custom integrations", "Dedicated support", "SLA guarantee", "On-premise option"] },
-            ].map(({ name, price, features, highlight }) => (
-              <div key={name} className={`rounded-2xl p-6 text-left ${highlight ? "bg-indigo-600/20 border border-indigo-500/40 glow" : "glass"}`}>
+              { name: "Starter", price: "Free", cta: "Get started", href: "/register", features: ["1 user", "Up to 100 customers", "AI Copilot (10 queries/day)", "Basic alerts"] },
+              { name: "Growth", price: "₦25,000/mo", cta: "Start free trial", href: "/register", features: ["5 users", "Unlimited customers", "Unlimited AI queries", "Predictive alerts", "Task automation"], highlight: true },
+              { name: "Enterprise", price: "Custom", cta: "Contact sales", href: `mailto:${site.contactEmail}?subject=NATIK%20Enterprise`, features: ["Unlimited users", "Custom integrations", "Dedicated support", "SLA guarantee", "On-premise option"] },
+            ].map(({ name, price, features, highlight, cta, href }) => (
+              <div key={name} className={`rounded-2xl p-6 text-left flex flex-col ${highlight ? "bg-indigo-600/20 border border-indigo-500/40 glow" : "glass"}`}>
                 <div className="text-sm text-white/50 mb-1">{name}</div>
                 <div className="text-2xl font-bold mb-6">{price}</div>
-                <ul className="space-y-2">
+                <ul className="space-y-2 flex-1">
                   {features.map((f) => (
                     <li key={f} className="flex items-center gap-2 text-sm text-white/70">
                       <CheckCircle size={14} className="text-indigo-400 shrink-0" />
@@ -189,40 +188,73 @@ export default function Home() {
                     </li>
                   ))}
                 </ul>
-                <Link
-                  href="/dashboard"
+                <a
+                  href={href}
                   className={`mt-6 block text-center py-3 rounded-xl text-sm font-medium transition-colors ${
                     highlight ? "bg-indigo-600 hover:bg-indigo-500" : "glass hover:bg-white/10"
                   }`}
                 >
-                  Get started
-                </Link>
+                  {cta}
+                </a>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-24 px-6 text-center">
-        <div className="max-w-2xl mx-auto glass rounded-3xl p-12 glow">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Ready to understand your business?
-          </h2>
-          <p className="text-white/50 mb-8">Join businesses across Africa using NATIK to operate smarter.</p>
-          <Link
-            href="/dashboard"
-            className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 px-8 py-4 rounded-xl font-semibold text-lg transition-all hover:scale-105"
-          >
-            Start for free <ArrowRight size={20} />
-          </Link>
+      {/* About */}
+      <section id="about" className="py-20 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">About NATIK</h2>
+            <p className="text-white/50 max-w-2xl mx-auto leading-relaxed">
+              Small and mid-sized businesses across Africa run on spreadsheets, WhatsApp threads and memory.
+              Payments slip, follow-ups get missed and owners often find out when it&apos;s too late.
+              NATIK brings that scattered information together and uses AI to tell owners what needs attention — and what to do about it.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { icon: Target, title: "Our mission", desc: "Give every African business owner the operational visibility that used to be available only to large enterprises." },
+              { icon: ShieldCheck, title: "Secure by design", desc: "Encrypted connections, hashed credentials and strict access controls. Your business data stays yours." },
+              { icon: MapPin, title: "Built locally", desc: `Designed in ${site.location} for how African businesses actually work — Naira-first, mobile-friendly and practical.` },
+            ].map(({ icon: Icon, title, desc }) => (
+              <div key={title} className="glass rounded-2xl p-6">
+                <Icon size={22} className="text-indigo-400 mb-4" />
+                <h3 className="font-semibold mb-2">{title}</h3>
+                <p className="text-white/50 text-sm leading-relaxed">{desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-white/5 py-8 px-6 text-center text-white/30 text-sm">
-        © 2025 NATIK. AI Operations Intelligence for African Businesses.
-      </footer>
+      {/* CTA / Contact */}
+      <section id="contact" className="py-24 px-6 text-center">
+        <div className="max-w-2xl mx-auto glass rounded-3xl p-8 sm:p-12 glow">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Ready to understand your business?
+          </h2>
+          <p className="text-white/50 mb-8">Create a free account in under a minute, or talk to us about your team&apos;s needs.</p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/register"
+              className="inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 px-8 py-4 rounded-xl font-semibold text-lg transition-all hover:scale-105"
+            >
+              Start for free <ArrowRight size={20} />
+            </Link>
+            <a
+              href={`mailto:${site.contactEmail}`}
+              className="inline-flex items-center justify-center gap-2 glass px-8 py-4 rounded-xl font-semibold text-lg hover:bg-white/10 transition-all"
+            >
+              <Mail size={18} /> Contact us
+            </a>
+          </div>
+          <p className="text-white/30 text-sm mt-6">{site.contactEmail}</p>
+        </div>
+      </section>
+
+      <SiteFooter />
     </div>
   );
 }

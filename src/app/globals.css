@@ -48,3 +48,8 @@ body {
 
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+.legal h2 { color: #fff; font-size: 1.25rem; font-weight: 600; margin-top: 2rem; margin-bottom: 0.5rem; }
+.legal ul { list-style: disc; padding-left: 1.5rem; }
+.legal ul li { margin: 0.25rem 0; }
+.legal a { color: #a5b4fc; text-decoration: underline; }

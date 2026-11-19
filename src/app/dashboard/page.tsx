@@ -4,9 +4,10 @@ import { useState } from "react";
 import { useSession, signOut } from "next-auth/react";
 import {
   Zap, LayoutDashboard, Users, CheckSquare, Package, MessageSquare,
-  TrendingUp, AlertTriangle, Clock, DollarSign, ChevronRight, Bell, LogOut
+  TrendingUp, AlertTriangle, Clock, DollarSign, ChevronRight, Bell, LogOut, Info
 } from "lucide-react";
 import { mockCustomers, mockTasks, mockOrders, getBusinessStats } from "@/lib/data";
+import { site } from "@/lib/site";
 
 const fmt = (n: number) => `₦${(n / 1000000).toFixed(1)}M`;
 
@@ -25,6 +26,13 @@ export default function Dashboard() {
   const stats = getBusinessStats();
   const [activeTab, setActiveTab] = useState<"overview" | "customers" | "tasks" | "orders">("overview");
 
+  const tabs = [
+    { id: "overview", label: "Overview", icon: LayoutDashboard },
+    { id: "customers", label: "Customers", icon: Users },
+    { id: "tasks", label: "Tasks", icon: CheckSquare },
+    { id: "orders", label: "Orders", icon: Package },
+  ] as const;
+
   const statCards = [
     { label: "Outstanding Payments", value: fmt(stats.totalOutstanding), icon: DollarSign, color: "text-red-400", bg: "bg-red-400/10", change: `${stats.overdueCustomers.length} customers overdue` },
     { label: "Total Revenue", value: fmt(stats.totalRevenue), icon: TrendingUp, color: "text-green-400", bg: "bg-green-400/10", change: `${mockCustomers.length} customers` },
@@ -35,7 +43,7 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-[#0a0a0f] text-white flex">
       {/* Sidebar */}
-      <aside className="w-60 glass border-r border-white/5 flex flex-col fixed h-full">
+      <aside className="hidden md:flex w-60 glass border-r border-white/5 flex-col fixed h-full">
         <div className="p-5 border-b border-white/5">
           <Link href="/" className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center">
@@ -46,15 +54,10 @@ export default function Dashboard() {
         </div>
 
         <nav className="flex-1 p-4 space-y-1">
-          {[
-            { id: "overview", label: "Overview", icon: LayoutDashboard },
-            { id: "customers", label: "Customers", icon: Users },
-            { id: "tasks", label: "Tasks", icon: CheckSquare },
-            { id: "orders", label: "Orders", icon: Package },
-          ].map(({ id, label, icon: Icon }) => (
+          {tabs.map(({ id, label, icon: Icon }) => (
             <button
               key={id}
-              onClick={() => setActiveTab(id as typeof activeTab)}
+              onClick={() => setActiveTab(id)}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${
                 activeTab === id ? "bg-indigo-600/20 text-indigo-300" : "text-white/50 hover:text-white hover:bg-white/5"
               }`}
@@ -94,9 +97,50 @@ export default function Dashboard() {
       </aside>
 
       {/* Main */}
-      <main className="ml-60 flex-1 p-8">
+      <main className="md:ml-60 flex-1 min-w-0 p-4 sm:p-8">
+        {/* Mobile top bar */}
+        <div className="md:hidden flex items-center justify-between mb-4">
+          <Link href="/" className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center">
+              <Zap size={16} />
+            </div>
+            <span className="font-bold text-lg">NATIK</span>
+          </Link>
+          <button
+            onClick={() => signOut({ callbackUrl: "/login" })}
+            className="glass p-2 rounded-lg text-white/40 hover:text-red-400 transition-colors"
+            title="Sign out"
+          >
+            <LogOut size={16} />
+          </button>
+        </div>
+        <div className="md:hidden flex gap-2 overflow-x-auto scrollbar-hide mb-6 -mx-4 px-4">
+          {tabs.map(({ id, label, icon: Icon }) => (
+            <button
+              key={id}
+              onClick={() => setActiveTab(id)}
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm whitespace-nowrap transition-colors ${
+                activeTab === id ? "bg-indigo-600/20 text-indigo-300" : "glass text-white/50"
+              }`}
+            >
+              <Icon size={14} />
+              {label}
+            </button>
+          ))}
+        </div>
+
+        {/* Sample data notice */}
+        <div className="flex items-start gap-3 rounded-xl border border-indigo-500/20 bg-indigo-500/10 px-4 py-3 mb-6 text-sm text-indigo-200">
+          <Info size={16} className="shrink-0 mt-0.5" />
+          <span>
+            Welcome{session?.user?.name ? `, ${session.user.name.split(" ")[0]}` : ""}! You&apos;re viewing a <strong>sample workspace</strong> so you can explore NATIK.
+            To connect your own business data, email{" "}
+            <a href={`mailto:${site.supportEmail}`} className="underline">{site.supportEmail}</a>.
+          </span>
+        </div>
+
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
             <h1 className="text-2xl font-bold capitalize">{activeTab === "overview" ? "Business Overview" : activeTab}</h1>
             <p className="text-white/40 text-sm mt-1">Last updated: {new Date().toLocaleDateString("en-NG", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</p>
@@ -116,7 +160,7 @@ export default function Dashboard() {
         {/* Overview */}
         {activeTab === "overview" && (
           <div className="space-y-6">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {statCards.map(({ label, value, icon: Icon, color, bg, change }) => (
                 <div key={label} className="glass rounded-2xl p-5">
                   <div className={`w-10 h-10 rounded-xl ${bg} flex items-center justify-center mb-3`}>
@@ -174,7 +218,7 @@ export default function Dashboard() {
         {/* Customers */}
         {activeTab === "customers" && (
           <div className="glass rounded-2xl overflow-hidden">
-            <div className="p-5 border-b border-white/5 flex items-center justify-between">
+            <div className="p-5 border-b border-white/5 flex flex-wrap gap-3 items-center justify-between">
               <h2 className="font-semibold">All Customers ({mockCustomers.length})</h2>
               <div className="flex gap-2 text-xs">
                 {["active", "at-risk", "overdue"].map((s) => (
@@ -186,9 +230,9 @@ export default function Dashboard() {
             </div>
             <div className="divide-y divide-white/5">
               {mockCustomers.map((c) => (
-                <div key={c.id} className="flex items-center justify-between px-5 py-4 hover:bg-white/[0.03] transition-colors">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-full bg-indigo-600/20 flex items-center justify-center text-sm font-medium text-indigo-300">
+                <div key={c.id} className="flex items-center justify-between gap-3 px-4 sm:px-5 py-4 hover:bg-white/[0.03] transition-colors">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-9 h-9 shrink-0 rounded-full bg-indigo-600/20 flex items-center justify-center text-sm font-medium text-indigo-300">
                       {c.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}
                     </div>
                     <div>
@@ -206,7 +250,7 @@ export default function Dashboard() {
                       {c.balance > 0 ? fmt(c.balance) : "Paid"}
                     </div>
                   </div>
-                  <span className={`text-xs px-2.5 py-1 rounded-full ${statusColor[c.status]}`}>{c.status}</span>
+                  <span className={`hidden sm:inline text-xs px-2.5 py-1 rounded-full ${statusColor[c.status]}`}>{c.status}</span>
                 </div>
               ))}
             </div>
@@ -221,7 +265,7 @@ export default function Dashboard() {
             </div>
             <div className="divide-y divide-white/5">
               {mockTasks.map((t) => (
-                <div key={t.id} className="flex items-center justify-between px-5 py-4 hover:bg-white/[0.03] transition-colors">
+                <div key={t.id} className="flex items-center justify-between gap-3 px-4 sm:px-5 py-4 hover:bg-white/[0.03] transition-colors">
                   <div className="flex items-center gap-3">
                     <div className={`w-2 h-2 rounded-full shrink-0 ${t.priority === "high" ? "bg-red-400" : t.priority === "medium" ? "bg-yellow-400" : "bg-white/20"}`} />
                     <div>

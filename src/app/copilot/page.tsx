@@ -25,7 +25,7 @@ export default function Copilot() {
     {
       role: "ai",
       content: "Hello! I'm NATIK, your AI business copilot. I've analyzed your business data and I'm ready to answer your questions.\n\nTry asking me about payments, customers, orders, staff tasks, or your biggest operational risks.",
-      ts: Date.now(),
+      ts: 0,
     },
   ]);
   const [input, setInput] = useState("");

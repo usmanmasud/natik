@@ -17,34 +17,38 @@ export default function RegisterPage() {
     setError("");
     setLoading(true);
 
-    const res = await fetch("/api/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
+    try {
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
 
-    const data = await res.json();
+      // The server may return an empty or non-JSON body on failure.
+      const data = await res.json().catch(() => ({}));
 
-    if (!res.ok) {
-      setError(data.error ?? "Something went wrong.");
+      if (!res.ok) {
+        setError(data.error ?? "Something went wrong. Please try again.");
+        return;
+      }
+
+      // Auto sign in after registration
+      const signInRes = await signIn("credentials", {
+        email: form.email.trim().toLowerCase(),
+        password: form.password,
+        redirect: false,
+      });
+
+      if (!signInRes || signInRes.error) {
+        router.push("/login");
+      } else {
+        router.push("/dashboard");
+        router.refresh();
+      }
+    } catch {
+      setError("We couldn't reach the server. Check your connection and try again.");
+    } finally {
       setLoading(false);
-      return;
-    }
-
-    // Auto sign in after registration
-    const signInRes = await signIn("credentials", {
-      email: form.email,
-      password: form.password,
-      redirect: false,
-    });
-
-    setLoading(false);
-
-    if (signInRes?.error) {
-      router.push("/login");
-    } else {
-      router.push("/dashboard");
-      router.refresh();
     }
   }
 
@@ -138,7 +142,9 @@ export default function RegisterPage() {
         </div>
 
         <p className="text-center text-xs text-white/20 mt-6">
-          By creating an account you agree to our Terms of Service and Privacy Policy.
+          By creating an account you agree to our{" "}
+          <Link href="/terms" className="underline hover:text-white/50">Terms of Service</Link> and{" "}
+          <Link href="/privacy" className="underline hover:text-white/50">Privacy Policy</Link>.
         </p>
       </div>
     </div>
