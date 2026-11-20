@@ -10,9 +10,12 @@ neonConfig.webSocketConstructor = ws;
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
 function createPrismaClient() {
+  // Don't throw here: this module is loaded at build time, and a missing
+  // variable must not fail the whole deployment. Queries will fail (and be
+  // reported as errors by the API routes) until DATABASE_URL is configured.
   const connectionString = process.env.DATABASE_URL;
   if (!connectionString) {
-    throw new Error("DATABASE_URL is not set. Add it to your environment variables.");
+    console.error("[prisma] DATABASE_URL is not set — database calls will fail.");
   }
   const pool = new Pool({ connectionString });
   const adapter = new PrismaNeon(pool);
